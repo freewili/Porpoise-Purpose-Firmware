@@ -44,6 +44,19 @@ class Packaging(unittest.TestCase):
         data=copy.copy(self.data); struct.pack_into('<I',data,512+12,0x10800000)
         with self.assertRaises(ValueError): image_version(data)
         with self.assertRaises(ValueError): image_version(self.data[:512])
+    def test_workaround_stays_below_data_partition(self):
+        data=copy.copy(self.data)
+        record=bytearray(data[:512])
+        struct.pack_into('<I',record,8,0xa000)
+        struct.pack_into('<I',record,12,0x107fff00)
+        struct.pack_into('<I',record,28,0xe48bff57)
+        record[32:288]=b'\xef'*256
+        data+=record
+        self.assertEqual(image_version(data),image_version(self.data))
+        unsafe=copy.copy(data); struct.pack_into('<I',unsafe,1024+12,0x10ffff00)
+        with self.assertRaises(ValueError): image_version(unsafe)
+        unsafe=copy.copy(data); struct.pack_into('<I',unsafe,512+12,0x107ff000)
+        with self.assertRaises(ValueError): image_version(unsafe)
     def test_extra_file(self):
         (self.folder/'extra.txt').write_text('x')
         with self.assertRaises(ValueError): validate(self.folder)

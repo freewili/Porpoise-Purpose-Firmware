@@ -12,3 +12,8 @@ been flash-tested on a physical Porpoise Purpose module, or through the GUI on m
 Use **Tools > Firmware Update > Porpoise Purpose module** in a GUI build containing the
 new updater, or copy the standalone UF2 to this board's RP2350 BOOTSEL drive.
 Keep USB power connected. Internal data and microSD contents are preserved.
+
+The RP2350-E10 workaround uses 0x107fff00 in the final sector of the lower
+8 MiB firmware area. The default 0x10ffff00 would touch the internal data
+area and is rejected by the packaging tools and GUI. The initial download
+was withdrawn before this corrected package was published.

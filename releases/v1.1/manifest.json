@@ -1,0 +1,23 @@
+{
+    "schema":  1,
+    "product":  "Porpoise-Purpose",
+    "release":  "v1.1",
+    "title":  "Porpoise Purpose module v1",
+    "source":  {
+                   "revision":  "0aa12fb1121f8108f21f9e6d870607f3055385e2",
+                   "dirty":  false,
+                   "target":  "WILiProbe",
+                   "compiler":  "Arm GNU 14.2.Rel1",
+                   "pico_sdk":  "2.3.0",
+                   "uf2_conversion":  "picotool uf2 convert --abs-block 0x107fff00"
+               },
+    "files":  [
+                  {
+                      "component":  "main",
+                      "version":  "v1",
+                      "file":  "firmware/Porpoise-Purpose.uf2",
+                      "size":  1251328,
+                      "sha256":  "3ebd0d0eb07713f491b78d3ac211e2b39efb4099b9d5d13dd3715234c2b73b33"
+                  }
+              ]
+}

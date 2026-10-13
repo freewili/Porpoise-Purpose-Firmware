@@ -14,8 +14,11 @@ source builds `dirty: true`; a base revision alone cannot reproduce them.
 
 `scripts/package_release.py releases/<tag>` validates UF2 magic, RP2350 ARM
 family, block completeness, board identity, version, flash bounds, and SHA-256.
-Only the exact picotool RP2350-E10 workaround record may lie outside the lower
-8 MiB firmware area. The ZIP uses fixed timestamps and permissions.
+The exact picotool RP2350-E10 workaround record must use 0x107fff00, inside
+the lower 8 MiB firmware area. Its last 4 KiB sector must contain no application
+blocks. Generate UF2 files with `picotool uf2 convert input.elf output.uf2
+--abs-block 0x107fff00`. The default 0x10ffff00 is rejected because it touches
+the internal data partition. The ZIP uses fixed timestamps and permissions.
 
 The publish workflow runs tests and creates four assets: the ZIP, its `.sha256`,
 the identical standalone UF2, and `checksums-<tag>.txt`. It creates a draft,

@@ -18,7 +18,7 @@ def image_version(data):
         require(size == 256 and address % 256 == 0, 'Invalid UF2 alignment')
         payload = data[offset+32:offset+288]
         if flags == 0xa000:
-            require(not workaround and (family,address,index,count) == (0xe48bff57,0x10ffff00,0,2) and payload == b'\xef'*256, 'Invalid RP2350-E10 record')
+            require(not workaround and (family,address,index,count) == (0xe48bff57,0x107fff00,0,2) and payload == b'\xef'*256, 'Invalid RP2350-E10 record')
             workaround = True
             continue
         require(flags == 0x2000 and family == 0xe48bff59, 'Wrong UF2 family or flags')
@@ -29,6 +29,7 @@ def image_version(data):
         indexes.add(index)
         blocks[address] = payload
     require(0x10000000 in blocks and len(indexes) == total, 'Missing UF2 blocks or image start')
+    require(not workaround or max(blocks) < 0x107ff000, 'Firmware overlaps the RP2350 workaround sector')
     payload, next_address = bytearray(), 0
     for address, block in sorted(blocks.items()):
         if address != next_address:
